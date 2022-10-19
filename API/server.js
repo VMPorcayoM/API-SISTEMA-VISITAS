@@ -4,12 +4,7 @@ const app = express();
 
 const port = 3000; // establecemos nuestro puerto
 
-app.get('/', function(req, res) {
-  res.json({ mensaje: '¡Hola Mundo!' })   
-});
-
-
-app.get('/oficinas', function(req, res) {
+app.get('/api/oficinas', function(req, res) {
     // Realizar una consulta
   $query = 'SELECT * from oficinas';
   res.header("Access-Control-Allow-Origin", "*");
@@ -24,15 +19,15 @@ app.get('/oficinas', function(req, res) {
 
 
 
-app.get('/auth/:user/:pass', function(req, res) {
+app.get('/api/auth/:user/:pass', function(req, res) {
   res.header("Access-Control-Allow-Origin", "*");
   let user = req.params.user || '';
   let pass = req.params.pass || '';
-
-$query = 'SELECT * from usuarios where nickname = \'' + user +'\' AND contrasena=\''+pass+'\'';
-  console.log($query);
   
-  conn.query($query, function(err, rows, fields) {
+
+  $query = 'SELECT * from usuarios where nickname = \'' + user +'\' AND contrasena=\''+pass+'\'';
+    
+    conn.query($query, function(err, rows, fields) {
       if(err){
           console.log("An error ocurred performing the query.");
           return;
@@ -44,7 +39,23 @@ $query = 'SELECT * from usuarios where nickname = \'' + user +'\' AND contrasena
       }
   });
 
-}),
+});
+
+app.get('/api/type/:user', function(req, res) {
+  res.header("Access-Control-Allow-Origin", "*");
+  let user = req.params.user || '';
+  $query = 'SELECT rol from usuarios where nickname = \'' + user +"\'";
+    
+    conn.query($query, function(err, rows, fields) {
+      if(err){
+          console.log("An error ocurred performing the query.");
+          return;
+      }
+      return res.json(rows);
+  });
+
+});
+
 
 app.listen(port,()=>{
 
