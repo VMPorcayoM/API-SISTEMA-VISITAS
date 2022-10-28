@@ -72,24 +72,25 @@ app.get('/api/visita/:folio', function(req, res) {
 });
 
 app.post('/api/visita', function(req, res) {
-  res.header("Access-Control-Allow-Origin", "*");
+  //res.header("Access-Control-Allow-Origin", "*");
 
   //NSERT INTO `registroentrada`.`visitas` (`nombres`, `apellidoPaterno`, `apellidoMaterno`, `tipoIdentificacion`, `NoIdentificacion`, `telefono`, `correo`, `oficinaQueVisita`, `direccion`, `fechaIngreso`, `identificacionFrontal`, `identificacionTrasera`) VALUES ('Victor', 'Porcayo', 'Mercado', 'INE', '1232342341', '3138082842', 'vmkds@gmail.com', 'askdksd', 'akdmaksdk', 'kamsd', 'asdjk', 'kasjd');
-  
+  console.log(req.body)
   $query = `INSERT INTO visitas 
   ('nombres','apellidoPaterno','apellidoMaterno','tipoIdentificacion',
   'NoIdentificacion','telefono','correo','oficinaQueVisita','direccion',
-  'fechaIngreso','identificacionFrontal','identificacionTrasera')   
+  'fechaIngreso','identificacionFrontal','identificacionTrasera','motivo')   
    VALUES (${req.body.nombres},${req.body.apellidoPaterno}, ${req.body.apellidoMaterno},
     ${req.body.tipoIdentificacion},${req.body.NoIdentificacion},${req.body.telefono},${req.body.correo},
-    ${req.body.oficinaQueVisita},${req.body.direccion},${req.body.fechaIngreso},${req.body.identificacionFrontal},${req.body.identificacionTrasera})`;
+    ${req.body.oficinaQueVisita},${req.body.direccion},${req.body.fechaIngreso},'','',${req.body.motivo})`;
         
     conn.query($query, function(err, rows, fields) {
+      console.log(rows)
       if(err){
           console.log("An error ocurred performing the query.");
-          return;
+          return false;
       }
-      return res.json(rows);
+      return true;
   });
 
 });
