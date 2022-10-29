@@ -76,6 +76,33 @@ app.get('/api/visita/:folio', function(req, res) {
   });
 
 });
+app.get('/api/visita', function(req, res) {
+  let folio = req.params.folio || '';
+  $query = 'SELECT * from visitas';
+    
+    conn.query($query, function(err, rows, fields) {
+      if(err){
+          console.log("An error ocurred performing the query.");
+          return;
+      }
+      return res.json(rows);
+  });
+
+});
+
+app.get('/api/usuarios', function(req, res) {
+  let folio = req.params.folio || '';
+  $query = 'SELECT nickname, rol from usuarios';
+    
+    conn.query($query, function(err, rows, fields) {
+      if(err){
+          console.log("An error ocurred performing the query.");
+          return;
+      }
+      return res.json(rows);
+  });
+
+});
 
 app.post('/api/nuevavisita', (req, res)=> {
 
@@ -99,6 +126,21 @@ app.post('/api/nuevavisita', (req, res)=> {
 
 });
 
+app.post('/api/usuario', (req, res)=> {
+
+  $query = `INSERT INTO  usuarios
+  (nickname,contrasena,rol)   
+   VALUES ('${req.body.nickname}','${req.body.contrasena}', '${req.body.rol}')`;
+        
+    conn.query($query, function(err, rows, fields) {      
+      if(err){
+          console.log("An error ocurred performing the query. "+err.message);
+          return res.send(false);
+      }
+      return res.send(true);
+  });
+
+});
 
 
 app.listen(port,()=>{
